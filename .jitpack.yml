@@ -1,16 +1,16 @@
 jdk:
-  - openjdk11
+  - openjdk17
 
 before_install:
-  # 初始化 submodule
+  # 初始化 git 子模块
   - git submodule update --init --recursive
-  # 如果 relic 不存在就下载
+  # 如果 dashkit 的 relic 库不存在就克隆
   - if [ ! -d "dashkit/bls-signatures/contrib/relic" ]; then
     git clone https://github.com/relic-toolkit/relic.git dashkit/bls-signatures/contrib/relic;
     fi
 
-install: true  # 使用 JitPack 默认 Android SDK/NDK
+install: true  # 安装 Android SDK/NDK/CMake 等
 
 script:
-  # 构建所有模块 release AAR
+  # 构建所有 library 模块的 release 版本
   - ./gradlew clean assembleRelease
