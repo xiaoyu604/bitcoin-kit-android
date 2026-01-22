@@ -1,23 +1,15 @@
-# JitPack 配置文件
-# https://docs.jitpack.io/#building
-
 jdk:
-  - openjdk17   # Android Gradle plugin 需要 Java 17
+  - openjdk17
 
 before_install:
-  # 初始化子模块（如果你有其他子模块）
+  # 初始化子模块
   - git submodule update --init --recursive
-  
-  # 如果 relic 文件夹不存在，则自动拉取
+  # 下载 relic 库
   - if [ ! -d "dashkit/bls-signatures/contrib/relic" ]; then
     git clone https://github.com/relic-toolkit/relic.git dashkit/bls-signatures/contrib/relic;
     fi
 
-install:
-  # 安装 Android SDK build-tools 和 NDK
-  - yes | sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;25.1.8937393" "cmake;3.22.1"
+install: true   # 使用 JitPack 已经安装好的 Android SDK/NDK/CMake
 
 script:
-  # 使用 Gradle 构建并发布到 MavenLocal
-  - ./gradlew clean -Pgroup=com.github.xiaoyu604 -Pversion=1.0.6 -xtest -xlint assemble publishToMavenLocal
-
+  - ./gradlew clean -Pgroup=com.github.xiaoyu604 -Pversion=1.0.7 -xtest -xlint assemble publishToMavenLocal
