@@ -4,13 +4,21 @@ jdk:
 before_install:
   # 初始化 git 子模块
   - git submodule update --init --recursive
-  # 如果 dashkit 的 relic 库不存在就克隆
+  # 克隆 relic 库
   - if [ ! -d "dashkit/bls-signatures/contrib/relic" ]; then
     git clone https://github.com/relic-toolkit/relic.git dashkit/bls-signatures/contrib/relic;
     fi
 
-install: true  # 安装 Android SDK/NDK/CMake 等
+install:
+  # 可以安装 Android SDK/NDK/CMake，如果需要
+  - true
 
 script:
-  # 构建所有 library 模块的 release 版本
+  # 构建所有 library module
   - ./gradlew clean assembleRelease
+
+after_success:
+  # 复制 AAR 到 artifacts 目录
+  - mkdir -p $HOME/artifacts
+  - cp dashkit/library1/build/outputs/aar/library1-release.aar $HOME/artifacts/
+  - cp dashkit/library2/build/outputs/aar/library2-release.aar $HOME/artifacts/
